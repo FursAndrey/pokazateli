@@ -60,7 +60,7 @@ if ($cel_znach > 0 && $dop_otkl_down > 0 && $dop_otkl_up > 0) {
 		$kod_diapazon = '1212';
 	}
 } elseif ($cel_znach > 0 && $dop_otkl_down == HIGH_IS_BEST && $dop_otkl_up > 0) {
-	$min = $cel_znach;
+	$min = 0;
 	$mid = $cel_znach;
 	$max = $cel_znach + $dop_otkl_up;
 	if ($otchet_date < CURRENT_DATE) {
@@ -71,20 +71,38 @@ if ($cel_znach > 0 && $dop_otkl_down > 0 && $dop_otkl_up > 0) {
 } elseif ($cel_znach > 0 && $dop_otkl_down > 0 && $dop_otkl_up == HIGH_IS_BEST) {
 	$min = $cel_znach - $dop_otkl_down;
 	$mid = $cel_znach;
-	$max = $cel_znach;
+	$max = INF;
 	if ($otchet_date < CURRENT_DATE) {
 		$kod_diapazon = '0113';
 	} else {
 		$kod_diapazon = '1113';
 	}
 } elseif ($cel_znach > 0 && $dop_otkl_down == HIGH_IS_BEST && $dop_otkl_up == HIGH_IS_BEST) {
-	$min = $cel_znach;
+	$min = 0;
 	$mid = $cel_znach;
-	$max = $cel_znach;
+	$max = INF;
 	if ($otchet_date < CURRENT_DATE) {
 		$kod_diapazon = '0313';
 	} else {
 		$kod_diapazon = '1313';
+	}
+} elseif ($cel_znach > 0 && $dop_otkl_down == HIGH_IS_BEST && $dop_otkl_up == LOW_IS_BEST) {
+	$min = 0;
+	$mid = $cel_znach;
+	$max = $cel_znach;
+	if ($otchet_date < CURRENT_DATE) {
+		$kod_diapazon = '0312';
+	} else {
+		$kod_diapazon = '1312';
+	}
+} elseif ($cel_znach > 0 && $dop_otkl_down == LOW_IS_BEST && $dop_otkl_up == HIGH_IS_BEST) {
+	$min = $cel_znach;
+	$mid = $cel_znach;
+	$max = INF;
+	if ($otchet_date < CURRENT_DATE) {
+		$kod_diapazon = '0213';
+	} else {
+		$kod_diapazon = '1213';
 	}
 }
 
@@ -124,12 +142,24 @@ $diapazons = [
 	'0113' => ['1'=>VERY_LOW,'2'=>LOW,'3'=>NORM,'4'=>NORM,'5'=>NORM],
 	'1113' => ['1'=>VERY_LOW,'2'=>LOW,'3'=>NORM,'4'=>HIGH,'5'=>HIGH],
 	'0313' => ['1'=>NORM,'2'=>NORM,'3'=>NORM,'4'=>NORM,'5'=>NORM],
-	'1313' => ['1'=>LOW,'2'=>LOW,'3'=>NORM,'4'=>HIGH,'5'=>HIGH]
+	'1313' => ['1'=>LOW,'2'=>LOW,'3'=>NORM,'4'=>HIGH,'5'=>HIGH],
+	'0213' => ['1'=>VERY_LOW,'2'=>VERY_LOW,'3'=>NORM,'4'=>NORM,'5'=>NORM],
+	'1213' => ['1'=>LOW,'2'=>LOW,'3'=>NORM,'4'=>NORM,'5'=>NORM],
+	'0312' => ['1'=>NORM,'2'=>NORM,'3'=>NORM,'4'=>VERY_HIGH,'5'=>VERY_HIGH],
+	'1312' => ['1'=>NORM,'2'=>NORM,'3'=>NORM,'4'=>HIGH,'5'=>HIGH]
+];
+
+$text_mark = [
+	1 => 'Ниже нормы',
+	2 => 'Ниже нормы (допустимо)',
+	3 => 'Соблюдается',
+	4 => 'Выше нормы (допустимо)',
+	5 => 'Выше нормы'
 ];
 
 echo "целевое зачение:$cel_znach<br/>";
 echo "допустимое отклонение: $dop_otkl_down / $dop_otkl_up<br/>";
 echo "фактическое зачение:$fakt<br/>";
 //вывод оценки
-echo 'оценка='.$diapazons[$kod_diapazon][$position];
+echo 'оценка-'.$text_mark[$diapazons[$kod_diapazon][$position]];
 ?>
