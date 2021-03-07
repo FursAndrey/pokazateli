@@ -9,11 +9,27 @@ define('CURRENT_DATE', date('Y-m-d'));
 <form method="POST">
 	<p>дата <input type="text" name="otchet_date" value="<?=$otchet_date?>"/></p>
 	<p>целевое значение <input type="text" name="cel_znach" value="<?=$cel_znach?>"/></p>
-	<p>отклонение вниз <input type="text" name="dop_otkl_down" value="<?=$dop_otkl_down?>"/></p>
-	<p>отклонение вверх <input type="text" name="dop_otkl_up" value="<?=$dop_otkl_up?>"/></p>
+	<p>отклонение вниз <input type="text" name="dop_otkl_down" onblur="tr(this);" value="<?=$dop_otkl_down?>"/><span></span></p>
+	<p>отклонение вверх <input type="text" name="dop_otkl_up" onblur="tr(this);" value="<?=$dop_otkl_up?>"/><span></span></p>
 	<p>факт <input type="text" name="fakt" value="<?=$fakt?>"/></p>
 	<input type="submit"/>
 </form>
+<script>
+	function tr(this_elem) {
+		var value_this_elem = this_elem.value;
+		if (value_this_elem >= 0) {
+			return false;
+		}
+
+		var text = '';
+		if (value_this_elem === '-99') {
+			text = 'Меньше - лучше';
+		} else if (value_this_elem === '-999') {
+			text = 'Больше - лучше';			
+		}
+		this_elem.parentNode.getElementsByTagName('span')[0].textContent = text;
+	}
+</script>
 <?php
 
 if (empty($_POST)) {
